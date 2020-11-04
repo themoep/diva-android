@@ -29,13 +29,18 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 #
-.PHONY: all install clean
+.PHONY: check_ndk_root all install clean
 
-all:
-	ndk-build
+all: check_ndk_root
+	$(NDK_ROOT)/ndk-build
 	rm -rf ../jniLibs/*
+	mkdir ../jniLibs/
 	cp -r ../libs/* ../jniLibs/
-clean:
-	ndk-build clean
+clean: check_ndk_root
+	$(NDK_ROOT)/ndk-build clean
 	rm -rf ../libs ../obj
 	rm -rf ../jniLibs/*
+check_ndk_root:
+    ifndef NDK_ROOT
+        $(error Please set the NDK_ROOT variable in the environment without trailing slash)
+    endif
